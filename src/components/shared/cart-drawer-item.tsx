@@ -20,7 +20,7 @@ export const CartDrawerItem: React.FC<Props> = ({ imageUrl, name, details, quant
 			<div className='flex-1'>
 				<div className='flex justify-between'>
 					<CartItem.Info name={name} details={details} />
-					<X className='text-gray-500 cursor-pointer hover:text-gray-600' size={18} />
+					<X className='text-gray-500 cursor-pointer hover:text-gray-600 absolute right-5' size={18} />
 				</div>
 
 				<hr className='my-3' />
