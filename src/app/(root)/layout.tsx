@@ -1,4 +1,4 @@
-import { Header } from '@/shared/components/shared/header'
+import { Header } from '@/components/shared/header'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
