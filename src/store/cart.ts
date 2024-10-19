@@ -1,3 +1,4 @@
+import { CreateCartItemValues } from '@/services/dto/cart.dto'
 import { create } from 'zustand'
 import { CartStateItem, getCartDetails } from '../lib/get-cart-details'
 import { Api } from '../services/api-client'
@@ -33,7 +34,42 @@ export const useCartStore = create<CartState>((set, get) => ({
 		}
 	},
 
-	removeCartItem: async (id: number) => {},
-	updateItemQuantity: async (id: number, quantity: number) => {},
-	addCartItem: async (values: any) => {},
+	updateItemQuantity: async (id: number, quantity: number) => {
+		try {
+			set({ loading: true, error: false })
+			const data = await Api.cart.updateItemQuantity(id, quantity)
+			set(getCartDetails(data))
+		} catch (e) {
+			console.error(e)
+			set({ loading: false })
+		} finally {
+			set({ loading: false })
+		}
+	},
+
+	removeCartItem: async (id: number) => {
+		try {
+			set({ loading: true, error: false })
+			const data = await Api.cart.deleteItem(id)
+			set(getCartDetails(data))
+		} catch (e) {
+			console.error(e)
+			set({ loading: false })
+		} finally {
+			set({ loading: false })
+		}
+	},
+
+	addCartItem: async (values: CreateCartItemValues) => {
+		try {
+			set({ loading: true, error: false })
+			const data = await Api.cart.addItem(values)
+			set(getCartDetails(data))
+		} catch (e) {
+			console.error(e)
+			set({ loading: false })
+		} finally {
+			set({ loading: false })
+		}
+	},
 }))

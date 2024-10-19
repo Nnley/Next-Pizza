@@ -13,24 +13,19 @@ import { Title } from './title'
 interface Props {
 	imageUrl: string
 	name: string
-	className?: string
 	ingredients: Ingredient[]
 	variations: ProductVariation[]
-	onClickAddCard?: VoidFunction
+	onSubmit: (variationId: number, ingredients: number[]) => void
+	className?: string
 }
 
-export const ChoosePizzaForm: React.FC<Props> = ({
-	imageUrl,
-	name,
-	className,
-	ingredients,
-	variations,
-	onClickAddCard,
-}) => {
+export const ChoosePizzaForm: React.FC<Props> = ({ imageUrl, name, className, ingredients, variations, onSubmit }) => {
 	const [size, setSize] = React.useState<PizzaSize>(30)
 	const [type, setType] = React.useState<PizzaType>(1)
 
 	const [selectedIngredients, { toggle: toggleSelectedIngredients }] = useSet(new Set<number>([]))
+
+	const currentItemId = variations.find(variation => variation.size === size && variation.pizzaType === type)?.id
 
 	const availableCrustVariations = variations.filter(item => item.size === size)
 
@@ -52,7 +47,9 @@ export const ChoosePizzaForm: React.FC<Props> = ({
 	const totalPrice = calcTotalPizzaPrice({ variations, ingredients, selectedIngredients, type, size })
 
 	const handleClickAddCard = () => {
-		onClickAddCard?.()
+		if (currentItemId) {
+			onSubmit(currentItemId, Array.from(selectedIngredients))
+		}
 	}
 
 	return (
