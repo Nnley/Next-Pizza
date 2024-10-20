@@ -16,7 +16,7 @@ interface Props {
 	loading?: boolean
 	ingredients: Ingredient[]
 	variations: ProductVariation[]
-	onSubmit: (variationId: number, ingredients: number[]) => void
+	onSubmit?: (variationId: number, ingredients: number[]) => void
 	className?: string
 }
 
@@ -57,7 +57,7 @@ export const ChoosePizzaForm: React.FC<Props> = ({
 
 	const handleClickAddCard = () => {
 		if (currentItemId) {
-			onSubmit(currentItemId, Array.from(selectedIngredients))
+			onSubmit?.(currentItemId, Array.from(selectedIngredients))
 		}
 	}
 

@@ -8,7 +8,7 @@ interface Props {
 	name: string
 	loading?: boolean
 	price: number
-	onSubmit: VoidFunction
+	onSubmit?: VoidFunction
 	className?: string
 }
 
@@ -26,7 +26,11 @@ export const ChooseProductForm: React.FC<Props> = ({ imageUrl, name, onSubmit, p
 			<div className='w-[490px] bg-[#f7f7f7] p-7'>
 				<Title text={name} size='md' className='font-extrabold mb-1' />
 
-				<Button onClick={onSubmit} className='h-[55px] px-10 text-base rounded-[18px] w-full mt-10' loading={loading}>
+				<Button
+					onClick={() => onSubmit?.()}
+					className='h-[55px] px-10 text-base rounded-[18px] w-full mt-10'
+					loading={loading}
+				>
 					Добавить в корзину за {price} ₽
 				</Button>
 			</div>

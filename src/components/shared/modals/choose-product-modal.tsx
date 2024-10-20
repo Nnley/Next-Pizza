@@ -24,30 +24,21 @@ export const ChooseProductModal: React.FC<Props> = ({ product, className }) => {
 	const isPizzaForm = Boolean(product.variations[0].pizzaType)
 	const { addCartItem, loading } = useCartStore(state => state)
 
-	const onAddProduct = async () => {
+	const onSubmit = async (productVariationId?: number, ingredients?: number[]) => {
 		try {
-			await addCartItem({
-				productItemId: firstItem.id,
-			})
-			toast.success('Продукт добавлен в корзину')
-			router.back()
-		} catch (error) {
-			console.log(error)
-			toast.error('Не удалось добавить продукт в корзину')
-		}
-	}
+			const variationId = productVariationId ?? firstItem.id
 
-	const onAddPizza = async (productItemId: number, ingredients: number[]) => {
-		try {
 			await addCartItem({
-				productItemId: productItemId,
-				ingredients: ingredients,
+				productVariationId: variationId,
+				ingredients,
 			})
-			toast.success('Пицца добавлена в корзину')
+
+			toast.success(`${product.name} добавлена в корзину`)
 			router.back()
 		} catch (error) {
 			console.log(error)
-			toast.error('Не удалось добавить пиццу в корзину')
+			toast.error(`Не удалось добавить ${product.name} в корзину`)
+			router.back()
 		}
 	}
 
@@ -65,14 +56,14 @@ export const ChooseProductModal: React.FC<Props> = ({ product, className }) => {
 						name={product.name}
 						ingredients={product.ingredients}
 						variations={product.variations}
-						onSubmit={onAddPizza}
+						onSubmit={onSubmit}
 						loading={loading}
 					/>
 				) : (
 					<ChooseProductForm
 						imageUrl={product.imageUrl}
 						name={product.name}
-						onSubmit={onAddProduct}
+						onSubmit={onSubmit}
 						price={firstItem.price}
 						loading={loading}
 					/>
