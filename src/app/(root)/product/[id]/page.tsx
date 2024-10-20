@@ -1,7 +1,7 @@
 import { Container, GroupVariants, PizzaImage, Title } from '@/components/shared'
 import { pizzaSizes } from '@/constants/pizza'
 import { notFound } from 'next/navigation'
-import { prisma } from '../../../../prisma/prisma-client'
+import { prisma } from '../../../../../prisma/prisma-client'
 
 export default async function ProductPage({ params: { id } }: { params: { id: string } }) {
 	const product = await prisma.product.findFirst({

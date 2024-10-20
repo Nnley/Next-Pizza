@@ -28,10 +28,10 @@ export const CartDrawerItem: React.FC<Props> = ({
 			<CartItem.Image src={imageUrl} />
 
 			<div className='flex-1'>
-				<div className='flex justify-between'>
+				<div className='flex justify-between relative'>
 					<CartItem.Info name={name} details={details} />
 					<X
-						className='text-gray-500 cursor-pointer hover:text-gray-600 absolute right-5'
+						className='text-gray-500 cursor-pointer hover:text-gray-600 absolute right-0'
 						size={18}
 						onClick={onClickDeleteButton}
 					/>

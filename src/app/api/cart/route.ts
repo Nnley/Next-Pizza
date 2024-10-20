@@ -3,7 +3,7 @@ import { updateCartTotalAmount } from '@/lib/update-cart-total-amount'
 import { CreateCartItemValues } from '@/services/dto/cart.dto'
 import crypto from 'crypto'
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '../../../prisma/prisma-client'
+import { prisma } from '../../../../prisma/prisma-client'
 
 export async function GET(req: NextRequest) {
 	try {
@@ -70,16 +70,16 @@ export async function POST(req: NextRequest) {
 					quantity: findCartItem.quantity + 1,
 				},
 			})
+		} else {
+			await prisma.cartItem.create({
+				data: {
+					cartId: userCart.id,
+					productVariationId: data.productItemId,
+					quantity: 1,
+					ingredients: { connect: data.ingredients?.map(id => ({ id })) },
+				},
+			})
 		}
-
-		await prisma.cartItem.create({
-			data: {
-				cartId: userCart.id,
-				productVariationId: data.productItemId,
-				quantity: 1,
-				ingredients: { connect: data.ingredients?.map(id => ({ id })) },
-			},
-		})
 
 		const updateUserCart = await updateCartTotalAmount(token)
 

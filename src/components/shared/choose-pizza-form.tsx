@@ -13,13 +13,22 @@ import { Title } from './title'
 interface Props {
 	imageUrl: string
 	name: string
+	loading?: boolean
 	ingredients: Ingredient[]
 	variations: ProductVariation[]
 	onSubmit: (variationId: number, ingredients: number[]) => void
 	className?: string
 }
 
-export const ChoosePizzaForm: React.FC<Props> = ({ imageUrl, name, className, ingredients, variations, onSubmit }) => {
+export const ChoosePizzaForm: React.FC<Props> = ({
+	imageUrl,
+	name,
+	className,
+	ingredients,
+	variations,
+	loading,
+	onSubmit,
+}) => {
 	const [size, setSize] = React.useState<PizzaSize>(30)
 	const [type, setType] = React.useState<PizzaType>(1)
 
@@ -96,7 +105,11 @@ export const ChoosePizzaForm: React.FC<Props> = ({ imageUrl, name, className, in
 					</div>
 				</div>
 
-				<Button className='h-[55px] px-10 text-base rounded-[18px] w-full mt-10' onClick={handleClickAddCard}>
+				<Button
+					className='h-[55px] px-10 text-base rounded-[18px] w-full mt-10'
+					onClick={handleClickAddCard}
+					loading={loading}
+				>
 					Добавить в корзину за {totalPrice} ₽
 				</Button>
 			</div>

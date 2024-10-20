@@ -6,12 +6,13 @@ import { Title } from './title'
 interface Props {
 	imageUrl: string
 	name: string
+	loading?: boolean
 	price: number
 	onSubmit: VoidFunction
 	className?: string
 }
 
-export const ChooseProductForm: React.FC<Props> = ({ imageUrl, name, onSubmit, price, className }) => {
+export const ChooseProductForm: React.FC<Props> = ({ imageUrl, name, onSubmit, price, loading, className }) => {
 	return (
 		<div className={cn(className, 'flex flex-1')}>
 			<div className='flex items-center justify-center flex-1 relative w-full'>
@@ -25,7 +26,7 @@ export const ChooseProductForm: React.FC<Props> = ({ imageUrl, name, onSubmit, p
 			<div className='w-[490px] bg-[#f7f7f7] p-7'>
 				<Title text={name} size='md' className='font-extrabold mb-1' />
 
-				<Button onClick={onSubmit} className='h-[55px] px-10 text-base rounded-[18px] w-full mt-10'>
+				<Button onClick={onSubmit} className='h-[55px] px-10 text-base rounded-[18px] w-full mt-10' loading={loading}>
 					Добавить в корзину за {price} ₽
 				</Button>
 			</div>
