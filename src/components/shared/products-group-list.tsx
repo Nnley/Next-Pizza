@@ -2,6 +2,7 @@
 
 import { cn } from '@/lib/utils'
 
+import { ProductWithRelations } from '@/@types/prisma'
 import { useCategoryStore } from '@/store/category'
 import React from 'react'
 import { useIntersection } from 'react-use'
@@ -10,7 +11,7 @@ import { Title } from './title'
 
 interface Props {
 	title: string
-	products: any[]
+	products: ProductWithRelations[]
 	categoryId: number
 	className?: string
 	listClassName?: string
@@ -47,6 +48,7 @@ export const ProductsGroupList: React.FC<React.PropsWithChildren<Props>> = ({
 						name={item.name}
 						price={item.variations[0].price}
 						imageUrl={item.imageUrl}
+						ingredients={item.ingredients}
 					/>
 				))}
 			</div>
