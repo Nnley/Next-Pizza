@@ -43,9 +43,9 @@ export const Filters: React.FC<React.PropsWithChildren<Props>> = ({ className })
 				onClickCheckbox={filters.setSizes}
 				selectedValues={filters.sizes}
 				items={[
-					{ text: 'Маленькая', value: '1' },
-					{ text: 'Средняя', value: '2' },
-					{ text: 'Большая', value: '3' },
+					{ text: 'Маленькая', value: '20' },
+					{ text: 'Средняя', value: '30' },
+					{ text: 'Большая', value: '40' },
 				]}
 			/>
 
