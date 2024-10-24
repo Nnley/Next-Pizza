@@ -104,6 +104,9 @@ model Cart {
 
   totalAmount Int @default(0) @map("total_amount")
 
+  promotionCode   PromotionCode? @relation(fields: [promotionCodeId], references: [id])
+  promotionCodeId Int?           @map("promotion_code_id")
+
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
@@ -178,6 +181,7 @@ model PromotionCode {
   discountPercentage Int
 
   createdAt DateTime @default(now()) @map("created_at")
+  cart      Cart[]
   order     Order[]
 
   @@unique([code])
