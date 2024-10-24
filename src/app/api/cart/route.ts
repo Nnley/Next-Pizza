@@ -53,12 +53,24 @@ export async function POST(req: NextRequest) {
 
 		const data = (await req.json()) as CreateCartItemValues
 
-		const findCartItem = await prisma.cartItem.findFirst({
+		const findCartItems = await prisma.cartItem.findMany({
 			where: {
 				cartId: userCart.id,
 				productVariationId: data.productVariationId,
-				ingredients: { every: { id: { in: data.ingredients } } },
 			},
+			include: {
+				ingredients: true,
+			},
+		})
+
+		const findCartItem = findCartItems.find(item => {
+			if (item.ingredients.length !== data.ingredients?.length) {
+				return false
+			}
+
+			return item.ingredients.every(ingredient =>
+				data.ingredients?.some(dataIngredient => dataIngredient === ingredient.id)
+			)
 		})
 
 		if (findCartItem) {
