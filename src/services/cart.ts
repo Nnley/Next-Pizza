@@ -25,3 +25,9 @@ export const addItem = async (values: CreateCartItemValues): Promise<CartDTO> =>
 
 	return data
 }
+
+export const applyPromoCode = async (promoCode: string): Promise<CartDTO & { totalAmount: number }> => {
+	const { data } = await axiosInstance.post<CartDTO>(`${ApiRoutes.CART}/apply-promo`, { promoCode })
+
+	return data
+}
