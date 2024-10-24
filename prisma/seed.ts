@@ -165,6 +165,7 @@ async function down() {
 	await prisma.$executeRaw`TRUNCATE TABLE "product_variations" RESTART IDENTITY CASCADE`
 	await prisma.$executeRaw`TRUNCATE TABLE "carts" RESTART IDENTITY CASCADE`
 	await prisma.$executeRaw`TRUNCATE TABLE "cart_items" RESTART IDENTITY CASCADE`
+	await prisma.$executeRaw`TRUNCATE TABLE "promotion_codes" RESTART IDENTITY CASCADE`
 }
 
 async function main() {
