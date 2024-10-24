@@ -3,6 +3,7 @@
 import { cn } from '@/lib/utils'
 import { useCategoryStore } from '@/store/category'
 import { Category } from '@prisma/client'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 
 interface Props {
@@ -12,6 +13,7 @@ interface Props {
 
 export const Categories: React.FC<Props> = ({ items, className }) => {
 	const categoryActiveId = useCategoryStore(state => state.activeId)
+	const router = useRouter()
 
 	return (
 		<div className={cn('inline-flex gap-1 bg-gray-50 p-1 rounded-2xl', className)}>
@@ -21,7 +23,7 @@ export const Categories: React.FC<Props> = ({ items, className }) => {
 						'flex items-center font-bold h-11 rounded-2xl px-5',
 						categoryActiveId === id && 'bg-white shadow-md shadow-gray-200 text-primary'
 					)}
-					href={`/#${name}`}
+					onClick={() => router.push(`#${name}`)}
 					key={index}
 				>
 					<button>{name}</button>
