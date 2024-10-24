@@ -148,6 +148,13 @@ async function up() {
 			},
 		},
 	})
+
+	await prisma.promotionCode.create({
+		data: {
+			code: 'tomhanksbest',
+			discountPercentage: 50,
+		},
+	})
 }
 
 async function down() {

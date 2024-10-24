@@ -137,9 +137,11 @@ model Order {
 
   token String
 
-  totalAmount Int         @map("total_amount")
-  status      OrderStatus
-  paymentId   String?     @map("payment_id")
+  totalAmount     Int            @map("total_amount")
+  promotionCodeId Int?           @map("promotion_code_id")
+  promotionCode   PromotionCode? @relation(fields: [promotionCodeId], references: [id])
+  status          OrderStatus
+  paymentId       String?        @map("payment_id")
 
   items Json
 
@@ -167,6 +169,19 @@ model VerificationCode {
 
   @@unique([userId, code])
   @@map("verification_codes")
+}
+
+model PromotionCode {
+  id Int @id @default(autoincrement())
+
+  code               String
+  discountPercentage Int
+
+  createdAt DateTime @default(now()) @map("created_at")
+  order     Order[]
+
+  @@unique([code])
+  @@map("promotion_codes")
 }
 
 enum OrderStatus {
