@@ -9,6 +9,7 @@ export type CartStateItem = {
 	price: number
 	pizzaSize?: number | null
 	pizzaType?: number | null
+	disabled?: boolean
 	ingredients: Array<{ name: string; price: number }>
 }
 
@@ -31,7 +32,7 @@ export const getCartDetails = (data: CartDTO): ReturnProps => {
 			name: ingredient.name,
 			price: ingredient.price,
 		})),
-	}))
+	})) as CartStateItem[]
 
 	return {
 		items,
