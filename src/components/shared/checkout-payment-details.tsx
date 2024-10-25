@@ -16,19 +16,30 @@ interface Props {
 	className?: string
 }
 
+const DELIVERY_PRICE = 200
+const VAT = 13
+
 export const CheckoutPaymentDetails: React.FC<Props> = ({
 	promoCodeData,
 	setPromoCodeData,
-	totalAmount,
+	totalAmount: totalProductsAmount,
 	className,
 }) => {
 	const [showPromoCodeField, setShowPromoCodeField] = React.useState<boolean>(false)
 	const [promoCodeInput, setPromoCodeInput] = React.useState<string>('')
 	const [isPromoCodeLoading, setIsPromoCodeLoading] = React.useState<boolean>(false)
 
-	const calcTotalDiscountAmount = () => {
-		if (!promoCodeData) return 0
-		return totalAmount * (1 - promoCodeData.discountPercentage / 100)
+	const totalProductAmountWithDiscount = () => {
+		if (!promoCodeData) return totalProductsAmount
+		return totalProductsAmount * (1 - promoCodeData.discountPercentage / 100)
+	}
+
+	const totalVATAmount = () => {
+		return totalProductAmountWithDiscount() * (VAT / 100)
+	}
+
+	const totalAmount = () => {
+		return totalProductAmountWithDiscount() + (totalVATAmount() + DELIVERY_PRICE)
 	}
 
 	const onApplyPromoCode = async () => {
@@ -54,19 +65,17 @@ export const CheckoutPaymentDetails: React.FC<Props> = ({
 		<div className={className}>
 			<div className='flex flex-col gap-1 mb-8'>
 				<span className='text-xl'>Итого:</span>
-				<span className='text-[34px] font-extrabold'>
-					{promoCodeData ? totalAmount - calcTotalDiscountAmount() : totalAmount} ₽
-				</span>
+				<span className='text-[34px] font-extrabold'>{totalAmount().toFixed(2)} ₽</span>
 			</div>
 
 			<CheckoutPaymentItemDetails
 				title={
 					<div className='flex items-center'>
 						<Package size={18} className='mr-2 text-gray-300' />
-						Стоимость товаров:
+						Стоимость корзины:
 					</div>
 				}
-				value={`${totalAmount} ₽`}
+				value={`${totalProductAmountWithDiscount()} ₽`}
 			/>
 			<CheckoutPaymentItemDetails
 				title={
@@ -75,7 +84,7 @@ export const CheckoutPaymentDetails: React.FC<Props> = ({
 						Налоги:
 					</div>
 				}
-				value={`${(totalAmount * 0.13).toFixed(2)} ₽`}
+				value={`${totalVATAmount().toFixed(2)} ₽`}
 			/>
 			<CheckoutPaymentItemDetails
 				title={
@@ -84,7 +93,7 @@ export const CheckoutPaymentDetails: React.FC<Props> = ({
 						Доставка:
 					</div>
 				}
-				value={`200 ₽`}
+				value={`${DELIVERY_PRICE} ₽`}
 			/>
 			{promoCodeData !== null && (
 				<CheckoutPaymentItemDetails
@@ -94,7 +103,7 @@ export const CheckoutPaymentDetails: React.FC<Props> = ({
 							Скидка:
 						</div>
 					}
-					value={`${calcTotalDiscountAmount()} ₽`}
+					value={`-${totalProductsAmount - totalProductAmountWithDiscount()} ₽`}
 				/>
 			)}
 
