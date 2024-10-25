@@ -3,25 +3,37 @@
 import { checkPromoCode } from '@/app/actions'
 import { cn } from '@/lib/utils'
 import type { PromotionCode } from '@prisma/client'
-import { ArrowRight, BadgePercent, Package, Percent, Truck } from 'lucide-react'
+import { BadgePercent, Package, Percent, Truck } from 'lucide-react'
 import React from 'react'
 import toast from 'react-hot-toast'
 import { Button, Input } from '../ui'
 import { CheckoutPaymentItemDetails } from './checkout-payment-item-details'
 
 interface Props {
+	promoCodeData: PromotionCode | null
+	setPromoCodeData: React.Dispatch<React.SetStateAction<PromotionCode | null>>
+	totalAmount: number
 	className?: string
 }
 
-export const CheckoutPaymentDetails: React.FC<Props> = ({ className }) => {
+export const CheckoutPaymentDetails: React.FC<Props> = ({
+	promoCodeData,
+	setPromoCodeData,
+	totalAmount,
+	className,
+}) => {
 	const [showPromoCodeField, setShowPromoCodeField] = React.useState<boolean>(false)
 	const [promoCodeInput, setPromoCodeInput] = React.useState<string>('')
 	const [isPromoCodeLoading, setIsPromoCodeLoading] = React.useState<boolean>(false)
-	const [promoCodeData, setPromoCodeData] = React.useState<PromotionCode | null>(null)
+
+	const calcTotalDiscountAmount = () => {
+		if (!promoCodeData) return 0
+		return totalAmount * (1 - promoCodeData.discountPercentage / 100)
+	}
 
 	const onApplyPromoCode = async () => {
 		if (promoCodeData !== null && promoCodeData.code === promoCodeInput) {
-			return toast.error('Промокод уже применен')
+			return toast.error('Этот промокод уже применен')
 		}
 
 		setIsPromoCodeLoading(true)
@@ -42,7 +54,9 @@ export const CheckoutPaymentDetails: React.FC<Props> = ({ className }) => {
 		<div className={className}>
 			<div className='flex flex-col gap-1 mb-8'>
 				<span className='text-xl'>Итого:</span>
-				<span className='text-[34px] font-extrabold'>4301 ₽</span>
+				<span className='text-[34px] font-extrabold'>
+					{promoCodeData ? totalAmount - calcTotalDiscountAmount() : totalAmount} ₽
+				</span>
 			</div>
 
 			<CheckoutPaymentItemDetails
@@ -52,7 +66,7 @@ export const CheckoutPaymentDetails: React.FC<Props> = ({ className }) => {
 						Стоимость товаров:
 					</div>
 				}
-				value={`3901 ₽`}
+				value={`${totalAmount} ₽`}
 			/>
 			<CheckoutPaymentItemDetails
 				title={
@@ -61,7 +75,7 @@ export const CheckoutPaymentDetails: React.FC<Props> = ({ className }) => {
 						Налоги:
 					</div>
 				}
-				value={`200 ₽`}
+				value={`${(totalAmount * 0.13).toFixed(2)} ₽`}
 			/>
 			<CheckoutPaymentItemDetails
 				title={
@@ -70,7 +84,7 @@ export const CheckoutPaymentDetails: React.FC<Props> = ({ className }) => {
 						Доставка:
 					</div>
 				}
-				value={`100 ₽`}
+				value={`200 ₽`}
 			/>
 			{promoCodeData !== null && (
 				<CheckoutPaymentItemDetails
@@ -80,7 +94,7 @@ export const CheckoutPaymentDetails: React.FC<Props> = ({ className }) => {
 							Скидка:
 						</div>
 					}
-					value={`${3901 * (1 - promoCodeData.discountPercentage / 100)} ₽`}
+					value={`${calcTotalDiscountAmount()} ₽`}
 				/>
 			)}
 
@@ -109,11 +123,6 @@ export const CheckoutPaymentDetails: React.FC<Props> = ({ className }) => {
 					Применить
 				</Button>
 			</div>
-
-			<Button type='submit' className='mt-6 w-full h-14 rounded-2xl text-base font-bold'>
-				Перейти к оплате
-				<ArrowRight className='w-5 ml-2' />
-			</Button>
 		</div>
 	)
 }

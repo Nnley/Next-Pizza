@@ -1,6 +1,7 @@
 export { CartButton } from './cart-button'
 export { CartDrawer } from './cart-drawer'
 export { Categories } from './categories'
+export { CheckoutCartItemSkeleton } from './checkout-cart-item-skeleton'
 export { CheckoutPaymentDetails } from './checkout-payment-details'
 export { CheckoutPaymentItemDetails } from './checkout-payment-item-details'
 export { ChoosePizzaForm } from './choose-pizza-form'
