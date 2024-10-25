@@ -6,13 +6,14 @@ import type { PromotionCode } from '@prisma/client'
 import { BadgePercent, Package, Percent, Truck } from 'lucide-react'
 import React from 'react'
 import toast from 'react-hot-toast'
-import { Button, Input } from '../ui'
+import { Button, Input, Skeleton } from '../ui'
 import { CheckoutPaymentItemDetails } from './checkout-payment-item-details'
 
 interface Props {
 	promoCodeData: PromotionCode | null
 	setPromoCodeData: React.Dispatch<React.SetStateAction<PromotionCode | null>>
 	totalAmount: number
+	loading?: boolean
 	className?: string
 }
 
@@ -24,6 +25,7 @@ export const CheckoutPaymentDetails: React.FC<Props> = ({
 	setPromoCodeData,
 	totalAmount: totalProductsAmount,
 	className,
+	loading,
 }) => {
 	const [showPromoCodeField, setShowPromoCodeField] = React.useState<boolean>(false)
 	const [promoCodeInput, setPromoCodeInput] = React.useState<string>('')
@@ -65,7 +67,11 @@ export const CheckoutPaymentDetails: React.FC<Props> = ({
 		<div className={className}>
 			<div className='flex flex-col gap-1 mb-8'>
 				<span className='text-xl'>Итого:</span>
-				<span className='text-[34px] font-extrabold'>{totalAmount().toFixed(2)} ₽</span>
+				{loading ? (
+					<Skeleton className='w-44 h-11' />
+				) : (
+					<span className='h-11 text-[34px] font-extrabold'>{totalAmount().toFixed(2)} ₽</span>
+				)}
 			</div>
 
 			<CheckoutPaymentItemDetails
@@ -75,7 +81,7 @@ export const CheckoutPaymentDetails: React.FC<Props> = ({
 						Стоимость корзины:
 					</div>
 				}
-				value={`${totalProductAmountWithDiscount()} ₽`}
+				value={loading ? <Skeleton className='w-16 h-6 rounded-sm' /> : `${totalProductAmountWithDiscount()} ₽`}
 			/>
 			<CheckoutPaymentItemDetails
 				title={
@@ -84,7 +90,7 @@ export const CheckoutPaymentDetails: React.FC<Props> = ({
 						Налоги:
 					</div>
 				}
-				value={`${totalVATAmount().toFixed(2)} ₽`}
+				value={loading ? <Skeleton className='w-16 h-6 rounded-sm' /> : `${totalVATAmount().toFixed(2)} ₽`}
 			/>
 			<CheckoutPaymentItemDetails
 				title={
@@ -93,7 +99,7 @@ export const CheckoutPaymentDetails: React.FC<Props> = ({
 						Доставка:
 					</div>
 				}
-				value={`${DELIVERY_PRICE} ₽`}
+				value={loading ? <Skeleton className='w-16 h-6 rounded-sm' /> : `${DELIVERY_PRICE} ₽`}
 			/>
 			{promoCodeData !== null && (
 				<CheckoutPaymentItemDetails

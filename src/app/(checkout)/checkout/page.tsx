@@ -12,7 +12,7 @@ import React from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
 export default function CheckoutPage() {
-	const { totalAmount, updateItemQuantity, items, removeCartItem } = useCart()
+	const { totalAmount, updateItemQuantity, items, removeCartItem, loading } = useCart()
 	const [promoCodeData, setPromoCodeData] = React.useState<PromotionCode | null>(null)
 
 	const form = useForm<CheckoutFormValues>({
@@ -46,9 +46,9 @@ export default function CheckoutPage() {
 						<div className='flex flex-col gap-10 flex-1 mb-20'>
 							<CheckoutCart items={items} removeCartItem={removeCartItem} onClickCountButton={onClickCountButton} />
 
-							<CheckoutPersonalForm />
+							<CheckoutPersonalForm className={loading ? 'opacity-50 cursor-not-allowed' : ''} />
 
-							<CheckoutAddressForm />
+							<CheckoutAddressForm className={loading ? 'opacity-50 cursor-not-allowed' : ''} />
 						</div>
 
 						<div className='w-[450px]'>
@@ -57,6 +57,7 @@ export default function CheckoutPage() {
 									promoCodeData={promoCodeData}
 									setPromoCodeData={setPromoCodeData}
 									totalAmount={totalAmount}
+									loading={loading}
 								/>
 								<Button type='submit' className='mt-6 w-full h-14 rounded-2xl text-base font-bold'>
 									Перейти к оплате

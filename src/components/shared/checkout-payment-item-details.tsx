@@ -2,7 +2,7 @@ import { cn } from '@/lib/utils'
 import React from 'react'
 
 interface Props {
-	value?: string
+	value?: React.ReactNode
 	title?: React.ReactNode
 	className?: string
 }
