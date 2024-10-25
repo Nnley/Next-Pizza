@@ -1,6 +1,7 @@
 import { PizzaSize, PizzaType } from '@/constants/pizza'
 import { CartStateItem } from '@/lib/get-cart-details'
 import { getCartItemDetails } from '@/lib/get-cart-item-details'
+import React from 'react'
 import { CheckoutCartItem } from '../checkout-cart-item'
 import { CheckoutCartItemSkeleton } from '../checkout-cart-item-skeleton'
 import { WhiteBlock } from '../white-block'
@@ -13,7 +14,13 @@ interface Props {
 	className?: string
 }
 
-export const CheckoutCart = ({ items, removeCartItem, onClickCountButton, loading, className }: Props) => {
+export const CheckoutCart: React.FC<Props> = ({
+	items,
+	removeCartItem,
+	onClickCountButton,
+	loading,
+	className,
+}: Props) => {
 	return (
 		<WhiteBlock title='1. Корзина' className={className}>
 			<div className='flex flex-col gap-5'>

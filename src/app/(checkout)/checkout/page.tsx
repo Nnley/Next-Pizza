@@ -12,8 +12,19 @@ import React from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
 export default function CheckoutPage() {
-	const { totalAmount, updateItemQuantity, items, removeCartItem, loading } = useCart()
+	const { fetchCartItems, totalAmount, updateItemQuantity, items, removeCartItem, loading } = useCart()
 	const [promoCodeData, setPromoCodeData] = React.useState<PromotionCode | null>(null)
+
+	const [isLoading, setIsLoading] = React.useState(true)
+
+	React.useEffect(() => {
+		const loadData = async () => {
+			fetchCartItems && (await fetchCartItems())
+			setIsLoading(false)
+		}
+
+		loadData()
+	}, [fetchCartItems])
 
 	const form = useForm<CheckoutFormValues>({
 		resolver: zodResolver(checkoutFormSchema),
@@ -48,12 +59,12 @@ export default function CheckoutPage() {
 								items={items}
 								removeCartItem={removeCartItem}
 								onClickCountButton={onClickCountButton}
-								loading={loading}
+								loading={isLoading}
 							/>
 
-							<CheckoutPersonalForm className={loading ? 'opacity-50 cursor-not-allowed' : ''} />
+							<CheckoutPersonalForm className={isLoading ? 'opacity-50 cursor-not-allowed' : ''} />
 
-							<CheckoutAddressForm className={loading ? 'opacity-50 cursor-not-allowed' : ''} />
+							<CheckoutAddressForm className={isLoading ? 'opacity-50 cursor-not-allowed' : ''} />
 						</div>
 
 						<div className='w-[450px]'>
@@ -62,7 +73,7 @@ export default function CheckoutPage() {
 									promoCodeData={promoCodeData}
 									setPromoCodeData={setPromoCodeData}
 									totalAmount={totalAmount}
-									loading={loading}
+									loading={isLoading}
 								/>
 								<Button type='submit' className='mt-6 w-full h-14 rounded-2xl text-base font-bold'>
 									Перейти к оплате
