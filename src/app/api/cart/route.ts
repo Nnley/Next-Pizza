@@ -64,6 +64,10 @@ export async function POST(req: NextRequest) {
 		})
 
 		const findCartItem = findCartItems.find(item => {
+			if (data.ingredients === undefined) {
+				return true
+			}
+
 			if (item.ingredients.length !== data.ingredients?.length) {
 				return false
 			}
