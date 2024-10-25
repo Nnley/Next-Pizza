@@ -92,3 +92,7 @@ html {
 #nprogress .spinner-icon {
 	@apply border-t-primary border-l-primary !important;
 }
+
+.react-dadata__input {
+	@apply border-input py-6 px-4 text-base flex h-10 w-full rounded-md border bg-background ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 !important;
+}
