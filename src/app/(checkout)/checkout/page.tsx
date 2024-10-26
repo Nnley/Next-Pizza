@@ -1,5 +1,6 @@
 'use client'
 
+import { createOrder } from '@/app/actions'
 import { CheckoutPaymentDetails, Container, Title, WhiteBlock } from '@/components/shared'
 import { CheckoutAddressForm, CheckoutCart, CheckoutPersonalForm } from '@/components/shared/checkout'
 import { checkoutFormSchema, CheckoutFormValues } from '@/components/shared/checkout/checkout-form-schema'
@@ -10,21 +11,20 @@ import type { PromotionCode } from '@prisma/client'
 import { ArrowRight } from 'lucide-react'
 import React from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
 
 export default function CheckoutPage() {
-	const { fetchCartItems, totalAmount, updateItemQuantity, items, removeCartItem, loading } = useCart()
+	const { totalAmount, updateItemQuantity, items, removeCartItem, loading } = useCart()
 	const [promoCodeData, setPromoCodeData] = React.useState<PromotionCode | null>(null)
 
-	const [isLoading, setIsLoading] = React.useState(true)
+	const [isLoading, setIsLoading] = React.useState<boolean>(true)
+	const [submitting, setSubmitting] = React.useState<boolean>(false)
 
 	React.useEffect(() => {
-		const loadData = async () => {
-			fetchCartItems && (await fetchCartItems())
+		if (!loading) {
 			setIsLoading(false)
 		}
-
-		loadData()
-	}, [fetchCartItems])
+	}, [loading])
 
 	const form = useForm<CheckoutFormValues>({
 		resolver: zodResolver(checkoutFormSchema),
@@ -38,8 +38,21 @@ export default function CheckoutPage() {
 		},
 	})
 
-	const onSubmit = (data: CheckoutFormValues) => {
-		console.log(data)
+	const onSubmit = async (data: CheckoutFormValues) => {
+		try {
+			setSubmitting(true)
+			const url = await createOrder(data, promoCodeData?.code)
+
+			toast.success('Заказ успешно оформлен! Переход на оплату...')
+
+			if (url) {
+				location.href = url
+			}
+		} catch (e) {
+			setSubmitting(false)
+			console.log(e)
+			toast.error('Не удалось оформить заказ')
+		}
 	}
 
 	const onClickCountButton = (id: number, quantity: number, type: 'plus' | 'minus') => {
@@ -75,7 +88,11 @@ export default function CheckoutPage() {
 									totalAmount={totalAmount}
 									loading={isLoading}
 								/>
-								<Button type='submit' className='mt-6 w-full h-14 rounded-2xl text-base font-bold'>
+								<Button
+									loading={isLoading || submitting}
+									type='submit'
+									className='mt-6 w-full h-14 rounded-2xl text-base font-bold'
+								>
 									Перейти к оплате
 									<ArrowRight className='w-5 ml-2' />
 								</Button>
