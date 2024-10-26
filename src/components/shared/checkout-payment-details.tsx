@@ -1,6 +1,7 @@
 'use client'
 
 import { checkPromoCode } from '@/app/actions'
+import { calculateTotalAmount } from '@/lib/calc-total-amount'
 import { cn } from '@/lib/utils'
 import type { PromotionCode } from '@prisma/client'
 import { BadgePercent, Package, Percent, Truck } from 'lucide-react'
@@ -31,18 +32,12 @@ export const CheckoutPaymentDetails: React.FC<Props> = ({
 	const [promoCodeInput, setPromoCodeInput] = React.useState<string>('')
 	const [isPromoCodeLoading, setIsPromoCodeLoading] = React.useState<boolean>(false)
 
-	const totalProductAmountWithDiscount = () => {
-		if (!promoCodeData) return totalProductsAmount
-		return totalProductsAmount * (1 - promoCodeData.discountPercentage / 100)
-	}
-
-	const totalVATAmount = () => {
-		return totalProductAmountWithDiscount() * (VAT / 100)
-	}
-
-	const totalAmount = () => {
-		return totalProductAmountWithDiscount() + (totalVATAmount() + DELIVERY_PRICE)
-	}
+	const { totalAmount, totalProductAmountWithDiscount, totalVATAmount } = calculateTotalAmount(
+		totalProductsAmount,
+		VAT,
+		DELIVERY_PRICE,
+		promoCodeData?.discountPercentage
+	)
 
 	const onApplyPromoCode = async () => {
 		if (promoCodeData !== null && promoCodeData.code === promoCodeInput) {
@@ -70,7 +65,7 @@ export const CheckoutPaymentDetails: React.FC<Props> = ({
 				{loading ? (
 					<Skeleton className='w-44 h-11' />
 				) : (
-					<span className='h-11 text-[34px] font-extrabold'>{totalAmount().toFixed(2)} ₽</span>
+					<span className='h-11 text-[34px] font-extrabold'>{totalAmount.toFixed(2)} ₽</span>
 				)}
 			</div>
 
@@ -81,7 +76,7 @@ export const CheckoutPaymentDetails: React.FC<Props> = ({
 						Стоимость корзины:
 					</div>
 				}
-				value={loading ? <Skeleton className='w-16 h-6 rounded-sm' /> : `${totalProductAmountWithDiscount()} ₽`}
+				value={loading ? <Skeleton className='w-16 h-6 rounded-sm' /> : `${totalProductAmountWithDiscount} ₽`}
 			/>
 			<CheckoutPaymentItemDetails
 				title={
@@ -90,7 +85,7 @@ export const CheckoutPaymentDetails: React.FC<Props> = ({
 						Налоги:
 					</div>
 				}
-				value={loading ? <Skeleton className='w-16 h-6 rounded-sm' /> : `${totalVATAmount().toFixed(2)} ₽`}
+				value={loading ? <Skeleton className='w-16 h-6 rounded-sm' /> : `${totalVATAmount.toFixed(2)} ₽`}
 			/>
 			<CheckoutPaymentItemDetails
 				title={
@@ -109,7 +104,7 @@ export const CheckoutPaymentDetails: React.FC<Props> = ({
 							Скидка:
 						</div>
 					}
-					value={`-${totalProductsAmount - totalProductAmountWithDiscount()} ₽`}
+					value={`-${totalProductsAmount - totalProductAmountWithDiscount} ₽`}
 				/>
 			)}
 
