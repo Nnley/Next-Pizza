@@ -1,8 +1,12 @@
+'use client'
+
 import { cn } from '@/lib/utils'
 import { User } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import React, { useEffect } from 'react'
+import toast from 'react-hot-toast'
 import { Button } from '../ui'
 import { CartButton } from './cart-button'
 import { Container } from './container'
@@ -15,6 +19,18 @@ interface Props {
 }
 
 export const Header: React.FC<Props> = ({ hasSearch = true, hasCart = true, className }) => {
+	const searchParams = useSearchParams()
+	const router = useRouter()
+
+	useEffect(() => {
+		if (searchParams.has('paid')) {
+			setTimeout(() => {
+				toast.success('Заказ успешно оплачен! Информация отправлена на почту.')
+				router.push('/')
+			}, 500)
+		}
+	}, [])
+
 	return (
 		<header className={cn('border-b', className)}>
 			<Container className='flex items-center justify-between py-8'>
