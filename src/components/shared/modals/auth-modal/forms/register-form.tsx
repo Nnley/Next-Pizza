@@ -11,10 +11,9 @@ import { FormRegisterValue, formRegisterSchema } from './schemas'
 
 interface Props {
 	onClose?: VoidFunction
-	onClickLogin?: VoidFunction
 }
 
-export const RegisterForm: React.FC<Props> = ({ onClose, onClickLogin }) => {
+export const RegisterForm: React.FC<Props> = ({ onClose }) => {
 	const form = useForm<FormRegisterValue>({
 		resolver: zodResolver(formRegisterSchema),
 		defaultValues: {
@@ -33,15 +32,11 @@ export const RegisterForm: React.FC<Props> = ({ onClose, onClickLogin }) => {
 				password: data.password,
 			})
 
-			toast.error('Регистрация успешна 📝. Подтвердите свою почту', {
-				icon: '✅',
-			})
+			toast.error('Регистрация успешна. Подтвердите свою почту')
 
 			onClose?.()
 		} catch (error) {
-			return toast.error('Неверный E-Mail или пароль', {
-				icon: '❌',
-			})
+			return toast.error('Неверный E-Mail или пароль')
 		}
 	}
 
