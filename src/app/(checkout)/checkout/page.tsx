@@ -6,9 +6,11 @@ import { CheckoutAddressForm, CheckoutCart, CheckoutPersonalForm } from '@/compo
 import { checkoutFormSchema, CheckoutFormValues } from '@/components/shared/checkout/checkout-form-schema'
 import { Button } from '@/components/ui'
 import { useCart } from '@/hooks/use-cart'
+import { Api } from '@/services/api-client'
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { PromotionCode } from '@prisma/client'
 import { ArrowRight } from 'lucide-react'
+import { useSession } from 'next-auth/react'
 import React from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -16,6 +18,7 @@ import toast from 'react-hot-toast'
 export default function CheckoutPage() {
 	const { totalAmount, updateItemQuantity, items, removeCartItem, loading } = useCart()
 	const [promoCodeData, setPromoCodeData] = React.useState<PromotionCode | null>(null)
+	const { data: session } = useSession()
 
 	const [isLoading, setIsLoading] = React.useState<boolean>(true)
 	const [submitting, setSubmitting] = React.useState<boolean>(false)
@@ -37,6 +40,21 @@ export default function CheckoutPage() {
 			comment: '',
 		},
 	})
+
+	React.useEffect(() => {
+		async function fetchUserInfo() {
+			const data = await Api.auth.getMe()
+			const [firstName, lastName] = data.fullName.split(' ')
+
+			form.setValue('firstName', firstName)
+			form.setValue('lastName', lastName)
+			form.setValue('email', data.email)
+		}
+
+		if (session) {
+			fetchUserInfo()
+		}
+	}, [session])
 
 	const onSubmit = async (data: CheckoutFormValues) => {
 		try {
