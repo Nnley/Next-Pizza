@@ -12,6 +12,10 @@ export const authOptions: AuthOptions = {
 		GoogleProvider({
 			clientId: process.env.GOOGLE_CLIENT_ID || '',
 			clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+		}),
+		GitHubProvider({
+			clientId: process.env.GITHUB_ID || '',
+			clientSecret: process.env.GITHUB_SECRET || '',
 			profile(profile) {
 				return {
 					id: profile.id,
@@ -21,10 +25,6 @@ export const authOptions: AuthOptions = {
 					role: 'USER' as UserRole,
 				}
 			},
-		}),
-		GitHubProvider({
-			clientId: process.env.GITHUB_ID || '',
-			clientSecret: process.env.GITHUB_SECRET || '',
 		}),
 		CredentialsProvider({
 			name: 'Credentials',
