@@ -25,10 +25,20 @@ export const Header: React.FC<Props> = ({ hasSearch = true, hasCart = true, clas
 	const router = useRouter()
 
 	useEffect(() => {
+		let toastMessage = ''
+
 		if (searchParams.has('paid')) {
+			toastMessage = 'Заказ успешно оплачен! Информация отправлена на почту.'
+		}
+
+		if (searchParams.has('verified')) {
+			toastMessage = 'Почта успешно подтверждена!'
+		}
+
+		if (toastMessage) {
 			setTimeout(() => {
-				toast.success('Заказ успешно оплачен! Информация отправлена на почту.')
-				router.push('/')
+				toast.success(toastMessage, { duration: 4000 })
+				router.replace('/')
 			}, 500)
 		}
 	}, [])
