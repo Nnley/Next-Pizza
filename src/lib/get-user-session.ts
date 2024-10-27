@@ -1,4 +1,4 @@
-import { authOptions } from '@/constants/next-options'
+import { authOptions } from '@/constants/auth-options'
 import { getServerSession } from 'next-auth'
 
 export const getUserSession = async () => {
