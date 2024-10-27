@@ -8,6 +8,7 @@ import React, { useEffect } from 'react'
 import toast from 'react-hot-toast'
 import { CartButton } from './cart-button'
 import { Container } from './container'
+import { AuthModal } from './modals/auth-modal/auth-modal'
 import { ProfileButton } from './profile-button'
 import { SearchInput } from './search-input'
 
@@ -18,6 +19,8 @@ interface Props {
 }
 
 export const Header: React.FC<Props> = ({ hasSearch = true, hasCart = true, className }) => {
+	const [openAuthModal, setOpenAuthModal] = React.useState(false)
+
 	const searchParams = useSearchParams()
 	const router = useRouter()
 
@@ -50,7 +53,9 @@ export const Header: React.FC<Props> = ({ hasSearch = true, hasCart = true, clas
 				)}
 
 				<div className='flex items-center gap-3'>
-					<ProfileButton />
+					<AuthModal open={openAuthModal} onClose={() => setOpenAuthModal(false)} />
+
+					<ProfileButton onClickSignIn={() => setOpenAuthModal(true)} />
 
 					{hasCart && <CartButton />}
 				</div>
