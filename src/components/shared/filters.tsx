@@ -51,23 +51,29 @@ export const Filters: React.FC<React.PropsWithChildren<Props>> = ({ className })
 
 			<div className='mt-5 border-y border-y-neutral-100 py-6 pb-7'>
 				<p className='font-bold mb-3'>Цена от и до:</p>
-				<div className='flex gap-3 mb-5'>
-					<Input
-						type='number'
-						placeholder='0'
-						min={0}
-						max={1000}
-						value={String(filters.priceFrom)}
-						onChange={e => filters.setPrices(Number(e.target.value), filters.priceTo)}
-					/>
-					<Input
-						type='number'
-						placeholder='1000'
-						min={100}
-						max={1000}
-						value={String(filters.priceTo)}
-						onChange={e => filters.setPrices(filters.priceFrom, Number(e.target.value))}
-					/>
+				<div className='flex justify-between gap-3 mb-5'>
+					<div className='relative w-full'>
+						<Input
+							type='number'
+							placeholder='0'
+							min={0}
+							max={1000}
+							value={String(filters.priceFrom)}
+							onChange={e => filters.setPrices(Number(e.target.value), filters.priceTo)}
+						/>
+						<span className='absolute inset-y-0 right-2 flex items-center text-gray-500'>₽</span>
+					</div>
+					<div className='relative w-full'>
+						<Input
+							type='number'
+							placeholder='1000'
+							min={100}
+							max={1000}
+							value={String(filters.priceTo)}
+							onChange={e => filters.setPrices(filters.priceFrom, Number(e.target.value))}
+						/>
+						<span className='absolute inset-y-0 right-2 flex items-center text-gray-500'>₽</span>
+					</div>
 				</div>
 
 				<RangeSlider
