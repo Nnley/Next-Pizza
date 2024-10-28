@@ -75,9 +75,12 @@ export async function createOrder(data: CheckoutFormValues, promoCode?: string) 
 			promoCodeData?.discountPercentage
 		)
 
+		const currentUser = await getUserSession()
+
 		const order = await prisma.order.create({
 			data: {
 				token,
+				userId: Number(currentUser?.id),
 				fullName: data.firstName + ' ' + data.lastName,
 				email: data.email,
 				phone: data.phone,
