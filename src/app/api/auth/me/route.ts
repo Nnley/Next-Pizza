@@ -10,7 +10,7 @@ export async function GET() {
 			return NextResponse.json({ message: 'Вы не авторизованы' }, { status: 401 })
 		}
 
-		const data = prisma.user.findUnique({
+		const data = prisma.user.findFirst({
 			where: {
 				id: Number(user.id),
 			},
@@ -21,7 +21,7 @@ export async function GET() {
 			},
 		})
 
-		return NextResponse.json(data)
+		return NextResponse.json(await data)
 	} catch (error) {
 		console.error(error)
 		return NextResponse.json({ message: '[USER_GET] Ошибка сервера' }, { status: 500 })
