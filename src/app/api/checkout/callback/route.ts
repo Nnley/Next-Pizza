@@ -49,6 +49,8 @@ export async function POST(req: NextRequest) {
 				completedPaymentTemplate({ orderId: order.id, items, discountPercentage })
 			)
 		}
+
+		return NextResponse.json({ success: true })
 	} catch (e) {
 		console.log('[CHECKOUT CALLBACK]', e)
 
