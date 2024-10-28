@@ -1,6 +1,7 @@
 'use client'
 
 import { updateUserInfo } from '@/app/actions'
+import { cn } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { User } from '@prisma/client'
 import { signOut } from 'next-auth/react'
@@ -8,16 +9,16 @@ import React from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { Button } from '../ui'
-import { Container } from './container'
 import { FormInput } from './form'
 import { formRegisterSchema, FormRegisterValue } from './modals/auth-modal/forms/schemas'
 import { Title } from './title'
 
 interface Props {
 	data: User
+	className?: string
 }
 
-export const ProfileForm: React.FC<Props> = ({ data }) => {
+export const ProfileForm: React.FC<Props> = ({ data, className }) => {
 	const form = useForm({
 		resolver: zodResolver(formRegisterSchema),
 		defaultValues: {
@@ -53,11 +54,14 @@ export const ProfileForm: React.FC<Props> = ({ data }) => {
 	}
 
 	return (
-		<Container className='my-10'>
+		<div className={cn('my-10', className)}>
 			<Title text='Личные данные' size='md' className='font-bold' />
 
 			<FormProvider {...form}>
-				<form className='flex flex-col gap-5 w-96 mt-10' onSubmit={form.handleSubmit(onSubmit)}>
+				<form
+					className='flex flex-col gap-5 w-96 mt-6 bg-white/90 p-7 rounded-lg'
+					onSubmit={form.handleSubmit(onSubmit)}
+				>
 					<FormInput name='email' label='E-Mail' required />
 					<FormInput name='fullName' label='Полное имя' required />
 
@@ -81,6 +85,6 @@ export const ProfileForm: React.FC<Props> = ({ data }) => {
 					</div>
 				</form>
 			</FormProvider>
-		</Container>
+		</div>
 	)
 }
