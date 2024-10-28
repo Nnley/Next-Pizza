@@ -44,6 +44,7 @@ export const CheckoutCart: React.FC<Props> = ({
 							disabled={item.disabled}
 							onClickRemove={() => removeCartItem(item.id)}
 							onClickCountButton={type => onClickCountButton(item.id, item.quantity, type)}
+							leftContentClassName='ml-20'
 						/>
 					))}
 			</div>
