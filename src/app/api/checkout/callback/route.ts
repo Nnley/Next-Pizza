@@ -23,6 +23,10 @@ export async function POST(req: NextRequest) {
 			return NextResponse.json({ error: 'Заказ не найден' }, { status: 500 })
 		}
 
+		if (order.status === OrderStatus.COMPLETED) {
+			return NextResponse.json({ success: true })
+		}
+
 		const isCompleted = body.object.status === 'succeeded'
 
 		await prisma.order.update({
