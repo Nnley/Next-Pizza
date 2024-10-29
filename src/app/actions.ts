@@ -134,7 +134,7 @@ export async function createOrder(data: CheckoutFormValues, promoCode?: string) 
 			'NextPizza | Оплатите заказ #' + order.id,
 			payOrderTemplate({
 				orderId: order.id,
-				totalAmount: totalAmount,
+				totalAmount: Number(totalAmount.toFixed(2)),
 				paymentLink: paymentLink,
 			})
 		)
